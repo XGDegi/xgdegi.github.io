@@ -5,7 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ad-Only Website</title>
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5267667501016077"
-     crossorigin="anonymous"></script>
+            crossorigin="anonymous"></script>
+    <style>
+        #error-message {
+            display: none;
+            color: red;
+            text-align: center;
+            margin-top: 20px;
+        }
+    </style>
 </head>
 <body>
     <!-- AdSense ad unit -->
@@ -16,7 +24,7 @@
              data-ad-slot="1234567890"
              data-ad-format="auto"></ins>
         <script>
-             (adsbygoogle = window.adsbygoogle || []).push({});
+            (adsbygoogle = window.adsbygoogle || []).push({});
         </script>
     </div>
 
@@ -25,15 +33,38 @@
         <h1>Thank You!</h1>
     </div>
 
-    <script>
-        // Function to replace the ad with the thank you message after 15 seconds
-        setTimeout(function() {
-            // Hide the ad container
-            document.getElementById('ad-container').style.display = 'none';
+    <!-- Placeholder for the error message -->
+    <div id="error-message">
+        <h1>Error: Ad Blocker Detected</h1>
+        <p>Please disable your ad blocker to view the content.</p>
+    </div>
 
-            // Show the thank you message
-            document.getElementById('thank-you').style.display = 'block';
-        }, 15000); // 15000 milliseconds = 15 seconds
+    <script>
+        // Function to detect ad blocker
+        function detectAdBlocker() {
+            const adElement = document.querySelector('.adsbygoogle');
+
+            // Check if the ad element has been hidden or removed
+            if (adElement && adElement.offsetHeight === 0) {
+                // Ad blocker is likely active
+                document.getElementById('ad-container').style.display = 'none';
+                document.getElementById('thank-you').style.display = 'none';
+                document.getElementById('error-message').style.display = 'block';
+            } else {
+                // If no ad blocker detected, proceed as usual
+                setTimeout(function() {
+                    // Hide the ad container after 15 seconds
+                    document.getElementById('ad-container').style.display = 'none';
+                    // Show the thank you message
+                    document.getElementById('thank-you').style.display = 'block';
+                }, 15000); // 15000 milliseconds = 15 seconds
+            }
+        }
+
+        // Run ad blocker detection after the ad script loads
+        window.onload = function() {
+            detectAdBlocker();
+        };
     </script>
 </body>
 </html>
