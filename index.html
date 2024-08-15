@@ -13,6 +13,20 @@
             text-align: center;
             margin-top: 20px;
         }
+
+        #ad-container {
+            display: block;
+            width: 100%;
+            height: auto;
+            min-height: 50px; /* Minimum height for ad space */
+        }
+
+        #bait {
+            width: 1px;
+            height: 1px;
+            position: absolute;
+            left: -9999px;
+        }
     </style>
 </head>
 <body>
@@ -28,6 +42,9 @@
         </script>
     </div>
 
+    <!-- Bait element to detect ad blockers -->
+    <div id="bait" class="adsbygoogle"></div>
+
     <!-- Placeholder for the thank you message -->
     <div id="thank-you" style="display:none; text-align:center; margin-top:20px;">
         <h1>Thank You!</h1>
@@ -42,19 +59,20 @@
     <script>
         // Function to detect ad blocker
         function detectAdBlocker() {
-            const adElement = document.querySelector('.adsbygoogle');
+            const bait = document.getElementById('bait');
+            const adContainer = document.getElementById('ad-container');
 
-            // Check if the ad element has been hidden or removed
-            if (adElement && adElement.offsetHeight === 0) {
+            // If bait element is not found or has been hidden by an ad blocker
+            if (!bait || bait.offsetParent === null || bait.offsetHeight === 0) {
                 // Ad blocker is likely active
-                document.getElementById('ad-container').style.display = 'none';
+                adContainer.style.display = 'none';
                 document.getElementById('thank-you').style.display = 'none';
                 document.getElementById('error-message').style.display = 'block';
             } else {
-                // If no ad blocker detected, proceed as usual
+                // No ad blocker detected, proceed as usual
                 setTimeout(function() {
                     // Hide the ad container after 15 seconds
-                    document.getElementById('ad-container').style.display = 'none';
+                    adContainer.style.display = 'none';
                     // Show the thank you message
                     document.getElementById('thank-you').style.display = 'block';
                 }, 15000); // 15000 milliseconds = 15 seconds
